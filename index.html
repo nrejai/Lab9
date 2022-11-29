@@ -83,25 +83,161 @@
       <button>Start Timer</button>
       <button>End Timer</button>
       <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button>Trigger a Global Error </button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    // STEP 5
+    window.TrackJS && TrackJS.install({ 
+      token: "29ef955ccea04c47bb3ed8563da3f48b",
+      application: "lab-9"
+    });
+  </script>
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
+      class ValidNumError extends Error {
+        constructor(message) {
+        super(message); 
+        this.name = "ValidNumError"; 
+        }}
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      // STEP 3 & 4
+      try {
+        if (!firstNum || !secondNum) {
+          throw new ValidNumError("No inputted numbers!");
+        }
+        if(isNaN(firstNum)){
+          let newNum = "";
+	        for (i = 0; i < firstNum.length; i++) {
+            if (!isNaN(firstNum[i])) {
+              newNum += firstNum[i]; //append valid parts of it to num
+            }
+          }
+          firstNum = newNum;
+        } 
+        if(isNaN(secondNum)){
+          let newNum = "";
+	        for (i = 0; i < secondNum.length; i++) {
+            if (!isNaN(secondNum[i])) {
+              newNum += secondNum[i]; //append valid parts of it to num
+            }
+          }
+          secondNum = newNum;
+        }
+      } catch (err){
+        console.log(err);
+      }
+      finally {
+        let operator = document.querySelector('#operator').value;
+        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+        var num1 = 100; 
+      }
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
-
-    // Start your code here
+    // Start your code here  
     // You may move this JS to another file if you wish
+
+    // STEP 2 
+    // Console Log
+    errorBtns[0].addEventListener("click", () => {
+      console.log("Console Log Demo");
+    });
+
+    // Console Error
+    errorBtns[1].addEventListener("click", () => {
+      console.error("Console Error Demo");
+    });
+
+    // Console Count
+    errorBtns[2].addEventListener("click", () => {
+      console.count("Count Button");
+    });
+  
+    // Console Warn
+    errorBtns[3].addEventListener("click", () => {
+      console.warn("Console Warn Button");
+    });
+
+    // Console Assert
+    errorBtns[4].addEventListener("click", () => {
+      let num = 3;
+      let errorMsg = "the number does not equal 3";
+      console.assert(num != 3, '%o', {num, errorMsg});
+    });
+
+    // Console Clear
+    errorBtns[5].addEventListener("click", () => {
+      console.clear();
+    });
+
+    let bt = document.querySelector('#error-btns > button');
+
+    // Console Dir
+    errorBtns[6].addEventListener("click", () => {
+      console.dir(errorBtns[6]);
+    });
+    
+    // Console dirxml
+    errorBtns[7].addEventListener("click", () => {
+      console.dirxml(errorBtns[7]); 
+    });
+
+    // Console Group Start
+    errorBtns[8].addEventListener("click", () => {
+      console.group();
+    });
+
+    // Console Group End
+    errorBtns[9].addEventListener("click", () => {
+      console.groupEnd(); 
+    });
+
+    // Console Table
+    errorBtns[10].addEventListener("click", () => {
+      function Obj(course, num) {
+        this.course = course;
+        this.num = num;
+      }
+      const course1 = new Obj("Software Engineering", "CSE 110");
+      const course2 = new Obj("Programming Languages", "CSE 130");
+      const course3 = new Obj("Advanced Software Engineering", "CSE 112");
+      console.table([course1, course2, course3]);
+    });
+
+    // Start Timer
+    errorBtns[11].addEventListener("click", () => {
+      console.time("Timer Button");
+    });
+
+    // End Timer
+    errorBtns[12].addEventListener("click", () => {
+      console.timeEnd("Timer Button");
+    });
+
+    // Console Trace
+    errorBtns[13].addEventListener("click", () => {
+      console.trace();
+    });
+
+    // Trigger a Global Error
+    errorBtns[14].addEventListener("click", () => {
+      function badCode() {
+        abooM('bad code!'); 
+      }
+      badCode();
+      window.addEventListener('error', onerror);
+      window.onerror = function() {
+        console.log('error from handler');
+      }
+  });
+
+
   </script>
 </body>
 
